@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  db:
+    restart: always
+    image: postgres
+    volumes:
+      - /var/lib/postgresql/data
+  web:
+    restart: always
+    build: ./web
+    env_file: .env
+    environment:
+      DEBUG: 'true'
+    volumes:
+      - /code
+    ports:
+      - "8000:8000"
+    command: python3 manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+  nginx:
+    restart: always
+    image: nginx
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - web:/www/static
+  redis:
+    restart: always
+    image: redis:latest
+    volumes:
+      - /data
+
+volumes:
+  web:
