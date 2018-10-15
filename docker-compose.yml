@@ -6,19 +6,28 @@ services:
     image: postgres
     volumes:
       - /var/lib/postgresql/data
-  web:
+  backend:
     restart: always
-    build: ./web
+    build: ./web/backend
     env_file: .env
     environment:
       DEBUG: 'true'
     volumes:
-      - ./web:/code
+      - ./web/backend:/code
+      - backend:/www/static
     ports:
       - "8000:8000"
-    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python3 manage.py collectstatic --no-input && python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
+  frontend:
+    restart: always
+    build: ./web/frontend
+    volumes:
+      - ./web/frontend:/frontend
+    ports:
+      - "4200:4200"
+    command: bash -c "npm install && npm install -g @angular/cli@6.2.5 && ng serve --host 0.0.0.0"
   nginx:
     restart: always
     image: nginx
@@ -26,7 +35,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - web:/www/static
+      - backend:/www/static
   redis:
     restart: always
     image: redis:latest
@@ -34,4 +43,4 @@ services:
       - /data
 
 volumes:
-  web:
+  backend:

@@ -45,7 +45,13 @@ eval $(docker-machine env moneyspent-dev)
   
 **connect with VM via ssh**  
 docker-machine ssh moneyspent-dev  
-After opening ssh connection to the VM, start 
+After opening ssh connection to the VM, start
+
+##IP Address  
+In order Android application to communicate with the backend, nginx web server should 
+be configured with the PC private IP address (e.g. 192.168.1.50) in nginx/conf.d/default.conf. 
+IP addresses in upstreams also should be changed to that address. To get the IP address of 
+your NIC, execute ip addr (on *nix) or ipconfig on Windows. 
 
 ##Additional docker commands
 **List docker containers, view logs, shell to a docker container, shutdown all containers**  
