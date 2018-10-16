@@ -1,27 +1,27 @@
 matrix:
   include:
-    - language: python
-      python:
-        - "3.7"
-      install:
-	pip install -r requirements.txt
-      script:
-        - pytest
+   - language: python
+     python:
+       - "3.7"
+     install:
+     pip install -r requirements.txt
+     script:
+       - pytest
  
-    - language: android
-      android:
-	components:
-	  - tools
-	  - platform-tools
-	  
-	  - build-tools: 28.0.3
-	  - android-28
-	  - extra
-    - language: node_js
-      node_js:
-	- "10.12.0"
-      before_script:
-	- npm install -g gulp-cli
-      script: gulp
-      before_install:
-	- npm i -g npm@10.12.0
+   - language: android
+     android:
+       components:
+       - tools
+       - platform-tools
+  
+       - build-tools: 28.0.3
+       - android-28
+       - extra
+   - language: node_js
+     node_js:
+       - "10.12.0"
+     before_script:
+       - npm install -g gulp-cli
+     script: gulp
+     before_install:
+       - npm i -g npm@10.12.0
