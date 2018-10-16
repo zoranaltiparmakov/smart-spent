@@ -37,14 +37,14 @@ When new model is added in django, execute ./setup.sh makemigrations and
 
 ##Windows users
 **create new virtualbox docker machine**  
-docker-machine create -d virtualbox moneyspent-dev  
+docker-machine create -d virtualbox smartspent-dev  
 
 **update environment vars, in order docker client to talks to docker engine on
-moneyspent-dev VM instead of host OS**  
-eval $(docker-machine env moneyspent-dev)
+smartspent-dev VM instead of host OS**  
+eval $(docker-machine env smartspent-dev)
   
 **connect with VM via ssh**  
-docker-machine ssh moneyspent-dev  
+docker-machine ssh smartspent-dev  
 After opening ssh connection to the VM, start
 
 ##IP Address  
@@ -62,9 +62,9 @@ docker-compose down
 
 **Docker VMs list, SSH to a VM, get the ip, stop VM**  
 docker-machine ls  
-docker-machine ssh moneyspent-dev  
-docker-machine ip moneyspent-dev  
-docker-machine stop moneyspent-dev
+docker-machine ssh smartspent-dev  
+docker-machine ip smartspent-dev  
+docker-machine stop smartspent-dev
 
 
 ## Deployment

@@ -2,9 +2,9 @@
 
 if [ "$1" = "createvm" ]; then
   # create new virtualbox docker machine
-  docker-machine create -d virtualbox moneyspent-dev
+  docker-machine create -d virtualbox smartspent-dev
   # update environment vars, in order docker client to talks to docker engine on moneyspent-dev VM
-  eval $(docker-machine env moneyspent-dev)
+  eval $(docker-machine env smartspent-dev)
 elif [ "$1" = "update" ] || [ "$1" = "" ]; then
   docker-compose build
   docker-compose up -d
