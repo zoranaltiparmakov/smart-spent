@@ -1,5 +1,11 @@
 # Spent Money Android application
 
+## DEVELOPMENT
+Whenever new feature or fix is going to be added, create new branch from development called FIX:fix-name 
+or FEATURE:feature-name and after completing the task, and successfully testing, merge into the development 
+branch. When everything is tested and works, merge development into staging branch, and CI/CD will deploy 
+to the production if test is passed.
+
 ## Introduction
 ##### This project is in early development mode.
 Goal of this project is developing Android application using Machine Learning and
