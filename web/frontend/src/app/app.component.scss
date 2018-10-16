@@ -1,0 +1,24 @@
+.background {
+    background: url('../assets/images/background.png') no-repeat;
+    height: 100%;
+    background-size: cover;
+    text-align: center;
+}
+
+h1 {
+    font-size: 5em;
+    font-weight: 100;
+}
+
+.logo {
+    background: url('../assets/images/logo.png') no-repeat;
+    width: 230px;
+    height: 260px;
+    margin: auto;
+    padding-top: 10%;
+    background-origin: content-box;
+}
+
+img {
+    margin-top: 12%;
+}

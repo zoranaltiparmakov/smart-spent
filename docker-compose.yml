@@ -27,13 +27,14 @@ services:
       - ./web/frontend:/frontend
     ports:
       - "4200:4200"
-    command: bash -c "npm install && npm install -g @angular/cli@6.2.5 && ng serve --host 0.0.0.0"
+    command: bash -c "ng serve --host 0.0.0.0 --disable-host-check"
   nginx:
     restart: always
     image: nginx
     build: ./nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - backend:/www/static
   redis:

@@ -1,5 +1,5 @@
 """
-WSGI config for money_spent project.
+WSGI config for smart_spent project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "money_spent.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "smart_spent.settings")
 
 application = get_wsgi_application()

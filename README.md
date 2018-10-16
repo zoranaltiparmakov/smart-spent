@@ -1,4 +1,4 @@
-# Spent Money Android application
+# Smart Spent Android application
 
 ## DEVELOPMENT
 Whenever new feature or fix is going to be added, create new branch from development called FIX:fix-name 
