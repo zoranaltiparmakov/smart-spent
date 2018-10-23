@@ -4,27 +4,38 @@ services:
   db:
     restart: always
     image: postgres
+    ports:
+      - "5432:5432"
     volumes:
       - /var/lib/postgresql/data
   backend:
     restart: always
-    build: ./web/backend
+    build: ./web/backend/Docker.prod
     env_file: .env
     environment:
-      DEBUG: 'false'
+      DEBUG: 'False'
     volumes:
-      - /code
+      - ./web/backend:/code
+      - backend:/www/static
     ports:
       - "8000:8000"
-    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python3 manage.py collectstatic --no-input && python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
+  frontend:
+    restart: always
+    build: ./web/frontend/Docker.prod
+    volumes:
+      - ./web/frontend:/frontend
+    ports:
+      - "4200:4200"
+    command: bash -c "ng build --prod --base-href dist"
   nginx:
     restart: always
-    image: nginx
-    build: ./nginx
+    build: ./nginx/Docker.prod
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - backend:/www/static
   redis:

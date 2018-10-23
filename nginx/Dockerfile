@@ -6,8 +6,6 @@ RUN apt-get install -y \
 
 RUN rm -f /etc/nginx/conf.d/*
 RUN rm -f /etc/nginx/nginx.conf
-RUN rm -rf /etc/ssl
 
 ADD nginx.conf /etc/nginx/nginx.conf
-ADD ssl /etc/ssl
 ADD conf.d/default.conf /etc/nginx/conf.d/default.conf

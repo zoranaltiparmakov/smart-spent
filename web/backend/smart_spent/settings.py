@@ -21,7 +21,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'h1_qr$i@a#ph-3y4qdo86a_t_7(%=nbv%-+p)8+67r3icwn*n*'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*'] if DEBUG else ['*']
@@ -36,21 +35,35 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
-    'rest_framework_swagger',
-    'app',
+    'rest_auth',
     'web',
+    'users',
+    'authentication'
 ]
 
+DEFAULT_RENDERER_CLASSES = (
+     'rest_framework.renderers.JSONRenderer',
+)
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
+
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
+    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     # How many objects per page are returned
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'TIME_FORMAT': '%H:%M',
+    'TIME_INPUT_FORMAT': ('%H:%M'),
 }
 
 MIDDLEWARE = [
@@ -61,6 +74,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'authentication.models.AuthBackend',
 ]
 
 ROOT_URLCONF = 'smart_spent.urls'
@@ -89,9 +106,9 @@ WSGI_APPLICATION = 'smart_spent.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'smartspent',
         'USER': 'postgres',
-        'HOST': 'db',
+        'HOST': '192.168.1.24', #db
         'PORT': 5432,
     }
 }
@@ -117,9 +134,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'sl-SI'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Ljubljana'
 
 USE_I18N = True
 
@@ -127,8 +144,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/www/static/'
+
+MEDIA_URL = '/static/media/'
+MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media/')
+

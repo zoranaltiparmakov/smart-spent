@@ -76,7 +76,3 @@ docker-machine stop smartspent-dev
 ## Deployment
 For deployment, production.yml should be used  
 docker-compose -f production.yml up -d
-
-## Django
-**Admin panel credentials:**  
-root:JZCL2wwmScvU49Mn
