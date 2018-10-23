@@ -13,7 +13,8 @@
 bin/
 gen/
 out/
-
+release/
+keystore.jks
 # Gradle files
 .gradle/
 build/

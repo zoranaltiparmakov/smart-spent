@@ -7,7 +7,7 @@ import android.content.Context;
  */
 public class Utils {
     // Django backend for auth and data
-    public static final String API_URL = "http://192.168.1.24/api/";
+    public static final String API_URL = "https://smartspent.si/api/";
 
     public static void setToken(Context context, String access_token) {
         context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE)
