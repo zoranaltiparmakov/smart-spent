@@ -10,7 +10,7 @@ services:
       - /var/lib/postgresql/data
   backend:
     restart: always
-    build: ./web/backend/Docker.prod
+    build: ./web/backend/
     env_file: .env
     environment:
       DEBUG: 'False'
@@ -24,7 +24,7 @@ services:
       - db
   frontend:
     restart: always
-    build: ./web/frontend/Docker.prod
+    build: ./web/frontend/
     volumes:
       - ./web/frontend:/frontend
     ports:
@@ -32,7 +32,9 @@ services:
     command: bash -c "ng build --prod --base-href dist"
   nginx:
     restart: always
-    build: ./nginx/Docker.prod
+    build: 
+      context: ./nginx/
+      dockerfile: Dockerfile.prod
     ports:
       - "80:80"
       - "443:443"
