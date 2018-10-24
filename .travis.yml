@@ -1,23 +1,18 @@
 jobs:
   include:
-   - language: python
+   - stage: test
+     language: python
      python:
        - "3.5"
      before_install:
        - cd ./web/backend
      install:
        - pip install -r requirements.txt
-     script:
-       - pytest
  
-   - language: android
-     android:
-       components:
-         - build-tools: 28.0.3
-         - android-28
-         - extra
-
-   - language: node_js
+   - stage: test
+     language: node_js
+     addons:
+       chrome: stable
      node_js:
        - "10.12.0"
      before_script:
@@ -28,3 +23,5 @@ jobs:
        - npm install
        - ng build --prod --aot
        - ng test
+
+   
