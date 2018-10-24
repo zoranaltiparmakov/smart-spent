@@ -4,9 +4,9 @@ jobs:
      python:
        - "3.5"
      install:
-       - pip install -r requirements.txt
+       - cd ./web/backend && pip install -r requirements.txt
      script:
-       - pytest
+       - cd ./web/backend && pytest
  
    - language: android
      android:
@@ -23,5 +23,3 @@ jobs:
      before_script:
        - npm install -g gulp-cli
      script: gulp
-     before_install:
-       - npm i -g npm@10.12.0
