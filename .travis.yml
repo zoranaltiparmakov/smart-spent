@@ -3,23 +3,28 @@ jobs:
    - language: python
      python:
        - "3.5"
+     before_install:
+       - cd ./web/backend
      install:
-       - cd ./web/backend && pip install -r requirements.txt
+       - pip install -r requirements.txt
      script:
-       - cd ./web/backend && pytest
+       - pytest
  
    - language: android
      android:
        components:
-       - tools
-       - platform-tools
-  
-       - build-tools: 28.0.3
-       - android-28
-       - extra
+         - build-tools: 28.0.3
+         - android-28
+         - extra
+
    - language: node_js
      node_js:
        - "10.12.0"
      before_script:
-       - npm install -g gulp-cli
-     script: gulp
+       - npm install -g @angular/cli
+       - npm install -g node-sass
+     script:
+       - cd ./web/frontend
+       - npm install
+       - ng build --prod --aot
+       - ng test
