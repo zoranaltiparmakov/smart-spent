@@ -75,6 +75,11 @@ public class DrawerActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                                 break;
+                            case R.id.nav_map:
+                                intent = new Intent(getApplicationContext(), MapActivity.class);
+                                startActivity(intent);
+                                finish();
+                                break;
                         }
                         return true;
                     }
@@ -84,6 +89,15 @@ public class DrawerActivity extends AppCompatActivity {
         View headerView = navigationView.getHeaderView(0);
         username = (TextView) headerView.findViewById(R.id.txt_username);
         username.setText(Utils.getUsername(this));
+
+        // when user clicks on drawer header or email, go to profile activity
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                finish();
+            }
+        });
 
         mDrawerLayout.addDrawerListener(
                 new DrawerLayout.DrawerListener() {
