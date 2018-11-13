@@ -206,11 +206,6 @@ public class RegisterActivity extends AppCompatActivity {
 
             if(success) {
                 Toast.makeText(getApplicationContext(), R.string.register_success, Toast.LENGTH_SHORT).show();
-                try {
-                    sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             } else {
                 Toast.makeText(getApplicationContext(), R.string.register_unsuccess, Toast.LENGTH_SHORT).show();

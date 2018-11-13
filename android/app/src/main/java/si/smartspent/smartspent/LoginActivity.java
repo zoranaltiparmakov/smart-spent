@@ -3,54 +3,37 @@ package si.smartspent.smartspent;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
 
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.ProtocolException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.Manifest.permission.READ_CONTACTS;
 import static si.smartspent.smartspent.Utils.API_URL;
 
 /**
@@ -73,12 +56,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
+        // if user is already logged in, redirect to profile activity
         if(Utils.isLoggedIn(getApplicationContext())) {
             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         }
 
+        setContentView(R.layout.activity_login);
         mEmailText = (EditText) findViewById(R.id.email);
 
         mPasswordText = (EditText) findViewById(R.id.password);
@@ -206,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
      * Represents an asynchronous login task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
         private final String mEmail;
         private final String mPassword;
 
@@ -237,7 +220,9 @@ public class LoginActivity extends AppCompatActivity {
                 if(!res.isSuccessful()) {
                     throw new IOException("Unexpected code " + res);
                 } else {
+                    // set token
                     Utils.setToken(getApplicationContext(), jsonObject.getString("token"));
+
                     return true;
                 }
             } catch (ProtocolException e) {
@@ -257,7 +242,9 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if(success) {
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                // request other user data and put it into shared preferences
+                UserDataTask userDataTask = new UserDataTask();
+                userDataTask.execute((Void) null);
             } else {
                 mPasswordText.setError(getString(R.string.error_incorrect_password));
                 mPasswordText.requestFocus();
@@ -268,6 +255,53 @@ public class LoginActivity extends AppCompatActivity {
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+    }
+
+    /**
+     * Get user related data such as username, name etc.
+     */
+    private class UserDataTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            final OkHttpClient client;
+            try {
+                OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                client = builder.build();
+
+                Request req = new Request.Builder()
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", "Token " + Utils.getToken(getApplicationContext()))
+                        .url(API_URL + "user")
+                        .get().build();
+                Response res = client.newCall(req).execute();
+
+                String jsonData = res.body().string();
+                JSONObject jsonObject = new JSONObject(jsonData);
+
+                if(!res.isSuccessful()) {
+                    throw new IOException("Unexpected code " + res);
+                } else {
+                    // put user data into shared preferences
+                    Utils.setUserData(getApplicationContext(), jsonObject);
+                }
+            } catch (ProtocolException e) {
+                Log.i(TAG, e.getMessage());
+            } catch (IOException e) {
+                Log.i(TAG, e.getMessage());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            showProgress(false);
+
+            if(success) {
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            }
         }
     }
 }
